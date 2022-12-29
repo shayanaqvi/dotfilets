@@ -1,0 +1,214 @@
+#+title: i3 Configuration File
+#+author: Shayan Naqvi
+#+property: header-args :tangle config
+* Modifier keys
+#+begin_src
+set $mod Mod4
+set $alt Mod1
+#+end_src
+* Font
+#+begin_src
+font pango:JetBrains Mono Bold 10
+#+end_src
+* Autostart
+#+begin_src
+exec --no-startup-id dex --autostart --environment i3
+exec --no-startup-id xss-lock --transfer-sleep-lock -- i3lock --nofork
+exec --no-startup-id nm-applet
+exec --no-startup-id blueman-applet
+exec --no-startup-id nitrogen --restore
+exec --no-startup-id picom
+exec --no-startup-id flameshot
+exec --no-startup-id polybar
+exec --no-startup-id kitty
+#+end_src
+* Volume
+#+begin_src
+set $refresh_i3status killall -SIGUSR1 i3status
+
+bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ +2% && $refresh_i3status
+bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ -2% && $refresh_i3status
+
+bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute @DEFAULT_SINK@ toggle && $refresh_i3status
+bindsym XF86AudioMicMute exec --no-startup-id pactl set-source-mute @DEFAULT_SOURCE@ toggle && $refresh_i3status
+
+bindsym XF86AudioPlay exec playerctl play-pause
+bindsym XF86AudioPause exec playerctl play-pause
+bindsym XF86AudioNext exec playerctl next
+bindsym XF86AudioPrev exec playerctl previous
+#+end_src
+* Brightness
+#+begin_src
+bindsym XF86MonBrightnessUp exec brightnessctl set +10%
+bindsym XF86MonBrightnessDown exec brightnessctl set 10%-
+
+bindsym $mod+XF86MonBrightnessDown exec sct 5000
+bindsym $mod+XF86MonBrightnessUp exec sct 4000
+
+bindsym Control+Shift+o exec brightnessctl set 30%
+#+end_src
+* Floating modifier
+#+begin_src
+floating_modifier $mod
+tiling_drag modifier titlebar
+#+end_src
+* Window focus/movement
+#+begin_src
+bindsym $mod+h focus left
+bindsym $mod+j focus down
+bindsym $mod+k focus up
+bindsym $mod+l focus right
+
+bindsym $mod+Shift+h move left
+bindsym $mod+Shift+j move down
+bindsym $mod+Shift+k move up
+bindsym $mod+Shift+l move right
+
+bindsym $mod+p split h
+
+bindsym $mod+o split v
+
+bindsym $mod+f fullscreen toggle
+bindsym $mod+Shift+space floating toggle
+bindsym $mod+space focus mode_toggle
+bindsym $mod+a focus parent
+#+end_src
+* Workspaces
+#+begin_src
+set $ws1 "1"
+set $ws2 "2"
+set $ws3 "3"
+set $ws4 "4"
+set $ws5 "5"
+set $ws6 "6"
+set $ws7 "7"
+set $ws8 "8"
+set $ws9 "9"
+set $ws10 "10"
+
+bindsym $mod+1 workspace number $ws1
+bindsym $mod+2 workspace number $ws2
+bindsym $mod+3 workspace number $ws3
+bindsym $mod+4 workspace number $ws4
+bindsym $mod+5 workspace number $ws5
+bindsym $mod+6 workspace number $ws6
+bindsym $mod+7 workspace number $ws7
+bindsym $mod+8 workspace number $ws8
+bindsym $mod+9 workspace number $ws9
+bindsym $mod+0 workspace number $ws10
+
+bindsym $mod+Shift+1 move container to workspace number $ws1
+bindsym $mod+Shift+2 move container to workspace number $ws2
+bindsym $mod+Shift+3 move container to workspace number $ws3
+bindsym $mod+Shift+4 move container to workspace number $ws4
+bindsym $mod+Shift+5 move container to workspace number $ws5
+bindsym $mod+Shift+6 move container to workspace number $ws6
+bindsym $mod+Shift+7 move container to workspace number $ws7
+bindsym $mod+Shift+8 move container to workspace number $ws8
+bindsym $mod+Shift+9 move container to workspace number $ws9
+bindsym $mod+Shift+0 move container to workspace number $ws10
+#+end_src
+* Window borders
+#+begin_src
+default_border pixel 3
+client.focused          #81a1c1 #81a1c1 #e5e9f0 #81a1c1 #81a1c1
+client.focused_inactive #4c566a #4c566a #e5e9f0 #4c566a #4c566a
+client.unfocused        #4c566a #4c566a #e5e9f0 #4c566a #4c566a
+client.urgent           #bf616a #bf616a #e5e9f0 #bf616a #bf616a
+#+end_src
+** Gaps
+#+begin_src
+gaps inner 10
+gaps outer 10 #(outer gaps = inner + outer)
+#+end_src
+* Bar
+#+begin_src
+bar {
+    status_command i3status
+    mode invisible
+    tray_output none
+}
+#+end_src
+* Notifications
+#+begin_src
+# Dismiss notification
+bindsym $mod+Escape exec dunstctl close
+
+# View notification history
+bindsym $mod+Shift+Escape exec dunstctl history-pop
+#+end_src
+* Other Keybindings
+#+begin_src
+# Lock screen
+bindsym Control+Shift+l exec i3lock --color 000000 && brightnessctl set 0
+
+# Launch terminal
+bindsym $mod+Return exec kitty
+
+# Kill focused window
+bindsym $mod+Shift+q kill
+
+# Reload configuration file
+bindsym $mod+Shift+c reload
+
+# Restart i3 without logging out
+bindsym $mod+Control+r restart
+#+end_src
+* Modes
+** Container layouts
+Select from Tabbed, Stacked or Split layouts
+#+begin_src
+bindsym $mod+XF86LaunchA mode "$container-layout"; exec notify-send i3 "(t) tabbed\n(s) stacked\n(d) split"
+
+mode "$container-layout" {
+     bindsym t layout tabbed
+     bindsym s layout stacking
+     bindsym d layout toggle split
+     bindsym Escape mode "default"; exec dunstctl close-all
+     bindsym Return mode "default"; exec dunstctl close-all
+     bindsym $mod+XF86LaunchA mode "default"; exec dunstctl close-all
+}
+#+end_src
+** Resize
+Resize windows in this mode
+#+begin_src
+bindsym $mod+r mode "resize"; exec dunstify i3 "Resize windows"
+mode "resize" {
+        bindsym h resize shrink width 2 px or 2 ppt
+        bindsym j resize grow height 2 px or 2 ppt
+        bindsym k resize shrink height 2 px or 2 ppt
+        bindsym l resize grow width 2 px or 2 ppt
+
+        bindsym Return mode "default"; exec dunstctl close-all
+        bindsym Escape mode "default"; exec dunstctl close-all
+        bindsym $mod+r mode "default"; exec dunstctl close-all
+}
+#+end_src
+** Launch application
+Launch an application by pressing a key
+#+begin_src
+bindsym $mod+XF86LaunchB mode "$launch-application"; exec dunstify i3 "Select an application to launch:\nMusikcube (m)\nRanger (e)\nNemo (E)\nEmacs (v)\nFirefox (f)"
+mode "$launch-application" {
+     bindsym m exec kitty musikcube; exec dunstctl close-all; mode "default"
+     bindsym e exec kitty ranger; exec dunstctl close-all; mode "default"
+     bindsym Shift+e exec nemo; exec dunstctl close-all; mode "default"
+     bindsym v exec emacs; exec dunstctl close-all; mode "default"
+     bindsym f exec firefox; exec dunstctl close-all; mode "default"
+     bindsym Escape mode "default"; exec dunstctl close-all
+     bindsym Return mode "default"; exec dunstctl close-all
+     bindsym $mod+XF86LaunchB mode "default"; exec dunstctl close-all
+}
+#+end_src
+** Exit session
+Options for exiting the current session
+#+begin_src
+bindsym $mod+Control+q mode "$exit-session"; exec dunstify i3 "Logout (l)\nShutdown (s)\nReboot (r)"
+mode "$exit-session" {
+     bindsym l exec i3-msg exit
+     bindsym s exec poweroff
+     bindsym r exec reboot
+     bindsym Escape mode "default"; exec dunstctl close-all
+     bindsym Return mode "default"; exec dunstctl close-all
+     bindsym $mod+Control+q mode "default"; exec dunstctl close-all
+}
+#+end_src
