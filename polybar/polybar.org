@@ -1,3 +1,33 @@
+#+title: Polybar
+#+author: Shayan Naqvi
+#+property: header-args :tangle config.ini
+* Table of Contents :toc:
+- [[#colours][Colours]]
+  - [[#nord][Nord]]
+  - [[#gruvbox][Gruvbox]]
+  - [[#mint-y-dark][Mint-Y Dark]]
+- [[#main-bar][Main bar]]
+  - [[#position-of-modules][Position of modules]]
+  - [[#positiondimensions][Position/dimensions]]
+  - [[#tray][Tray]]
+  - [[#appearance][Appearance]]
+  - [[#fonts][Fonts]]
+- [[#modules][Modules]]
+  - [[#backlight][Backlight]]
+  - [[#cpu][CPU]]
+  - [[#date][Date]]
+  - [[#i3][i3]]
+  - [[#memory][Memory]]
+  - [[#network][Network]]
+  - [[#volume][Volume]]
+  - [[#xkeyboard][Xkeyboard]]
+  - [[#xwindow][Xwindow]]
+  - [[#xworkspaces][Xworkspaces]]
+  - [[#currently-playing][Currently playing]]
+
+* Colours
+** Nord
+#+begin_src ini
 [colours]
 background = #2e3440
 background-alt = #3b4252
@@ -10,7 +40,9 @@ fiftiary = #ebcb8b
 sixtiary = #d08770
 alert = #bf616a
 disabled = #4c566a
-
+#+end_src
+** Gruvbox
+#+begin_src ini
 ;background = #282828
 ;background-alt = #3c3836
 ;foreground = #ebdbb2
@@ -22,7 +54,9 @@ disabled = #4c566a
 ;sixtiary = #fe8019
 ;alert = #fb4934
 ;disabled = #504945
-
+#+end_src
+** Mint-Y Dark
+#+begin_src ini
 ;background = #212121
 ;background-alt = #3d3d3d
 ;foreground = #dfdfdf
@@ -34,21 +68,30 @@ disabled = #4c566a
 ;sixtiary = #1f9ede
 ;alert = #1f9ede
 ;disabled = #70737a
-
+#+end_src
+* Main bar
+** Position of modules
+#+begin_src ini
 [bar/main]
 modules-left = date xwindow
 modules-center = i3
 modules-right = playing backlight volume cpu memory wlan xkeyboard
-
+#+end_src
+** Position/dimensions
+#+begin_src ini
 bottom = false
 fixed-center = true
 width = 100%
 height = 30px
-
+#+end_src
+** Tray
+#+begin_src ini
 tray-position = right
 tray-detached = false
 tray-maxsize = 14
-
+#+end_src
+** Appearance
+#+begin_src ini
 background = ${colours.background}
 foreground = ${colours.foreground}
 line-size = 3
@@ -57,11 +100,16 @@ module-margin = 1
 padding-right = 1
 padding-left = 1
 separator = ○
-
+#+end_src
+** Fonts
+#+begin_src ini
 font-0 = "Fira Code:style=Regular:size=11;0"
 font-1 = "Fira Code:style=Regular:weight=Bold:size=11;0"
 font-2 = "Material Design Icons:size=11;1"
-
+#+end_src
+* Modules
+** Backlight
+#+begin_src ini
 [module/backlight]
 type = internal/backlight
 card = acpi_video0
@@ -73,7 +121,9 @@ format-foreground = ${colours.secondary}
 ;;bar-indicator = |
 ;;bar-fill = ─
 ;;bar-empty = ─
-
+#+end_src
+** CPU
+#+begin_src ini
 [module/cpu]
 type = internal/cpu
 warn-percentage = 90
@@ -84,7 +134,9 @@ format-foreground = ${colours.fourtiary}
 ;;bar-load-indicator = |
 ;;bar-load-fill = ─
 ;;bar-load-empty = ─
-
+#+end_src
+** Date
+#+begin_src ini
 [module/date]
 type = internal/date
 date = %Y-%m-%d%
@@ -94,7 +146,9 @@ format-underline = ${colours.secondary}
 format-foreground = ${colours.secondary}
 label = %date% (%time%)
 label-font = 1
-
+#+end_src
+** i3
+#+begin_src ini
 [module/i3]
 type = internal/i3
 show-urgent = true
@@ -133,7 +187,9 @@ label-urgent-padding = 1
 label-empty = %icon% %name%
 label-empty-foreground = ${colours.disabled}
 label-empty-padding = 1
-
+#+end_src
+** Memory
+#+begin_src ini
 [module/memory]
 type = internal/memory
 interval = 5
@@ -145,7 +201,9 @@ format-foreground = ${colours.fiftiary}
 ;;bar-used-width = 10
 ;;bar-used-fill = ─
 ;;bar-used-empty = ─
-
+#+end_src
+** Network
+#+begin_src ini
 [network-base]
 type = internal/network
 interval = 5
@@ -164,7 +222,9 @@ label-connected = 󰤨 %essid%
 inherit = network-base
 interface-type = wired
 label-connected = %{F#F0C674}%ifname%%{F-}
-
+#+end_src
+** Volume
+#+begin_src ini
 [module/volume]
 type = internal/pulseaudio
 interval = 3
@@ -177,7 +237,9 @@ label-muted-foreground = ${colours.disabled}
 ;;bar-volume-indicator = |
 ;;bar-volume-fill = ─
 ;;bar-volume-empty = ─
-
+#+end_src
+** Xkeyboard
+#+begin_src ini
 [module/xkeyboard]
 blacklist-0 = num lock
 type = internal/xkeyboard
@@ -188,7 +250,9 @@ label-indicator-padding = 2
 label-indicator-margin = 1
 label-indicator-foreground = ${colours.background}
 label-indicator-background = ${colours.alert}
-
+#+end_src
+** Xwindow
+#+begin_src ini
 [module/xwindow]
 type = internal/xwindow
 format-background = ${colours.background}
@@ -199,7 +263,9 @@ label-maxlen = 60
 label-empty = No windows available
 label-empty-underline = ${colours.disabled}
 label-empty-foreground = ${colours.disabled}
-
+#+end_src
+** Xworkspaces
+#+begin_src ini
 [module/xworkspaces]
 type = internal/xworkspaces
 enable-scroll = true
@@ -219,7 +285,9 @@ label-urgent-padding = 1
 label-empty = %name%
 label-empty-foreground = ${colours.disabled}
 label-empty-padding = 1
-
+#+end_src
+** Currently playing
+#+begin_src ini
 [module/playing]
 type = custom/script
 exec = ~/Source/polybar-scripts/polybar-scripts/player-mpris-tail/player-mpris-tail.py -f '󰎇 {artist} - {title}'
@@ -229,3 +297,4 @@ format-foreground = ${colours.primary}
 click-left = ~/Source/polybar-scripts/polybar-scripts/player-mpris-tail/player-mpris-tail.py previous &
 click-right = ~/Source/polybar-scripts/polybar-scripts/player-mpris-tail/player-mpris-tail.py next &
 click-middle = ~/Source/polybar-scripts/polybar-scripts/player-mpris-tail/player-mpris-tail.py play-pause &
+#+end_src

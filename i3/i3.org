@@ -1,29 +1,58 @@
 #+title: i3 Configuration File
 #+author: Shayan Naqvi
 #+property: header-args :tangle config
+* Table of Contents :toc:
+- [[#modifier-keys][Modifier keys]]
+- [[#font][Font]]
+- [[#autostart][Autostart]]
+- [[#volume][Volume]]
+- [[#brightness][Brightness]]
+- [[#floating-modifier][Floating modifier]]
+- [[#window-focusmovement][Window focus/movement]]
+- [[#workspaces][Workspaces]]
+- [[#window-borders][Window borders]]
+  - [[#gaps][Gaps]]
+- [[#bar][Bar]]
+- [[#notifications][Notifications]]
+- [[#other-keybindings][Other Keybindings]]
+  - [[#lock-screen][Lock screen]]
+  - [[#restart-polybar][Restart Polybar]]
+  - [[#launch-terminal][Launch terminal]]
+  - [[#kill-focused-window][Kill focused window]]
+  - [[#reload-configuration-file][Reload configuration file]]
+  - [[#restart-i3-without-logging-out][Restart i3 without logging out]]
+- [[#modes][Modes]]
+  - [[#container-layouts][Container layouts]]
+  - [[#resize][Resize]]
+  - [[#launch-application][Launch application]]
+  - [[#flameshot][Flameshot]]
+  - [[#change-wallpaper][Change wallpaper]]
+  - [[#exit-session][Exit session]]
+
 * Modifier keys
-#+begin_src
+#+begin_src emacs-lisp
 set $mod Mod4
 set $alt Mod1
 #+end_src
 * Font
-#+begin_src
-font pango:JetBrains Mono Bold 10
+#+begin_src emacs-lisp
+font pango:Source Code Pro Italic 10
 #+end_src
 * Autostart
-#+begin_src
+#+begin_src emacs-lisp
 exec --no-startup-id dex --autostart --environment i3
 exec --no-startup-id xss-lock --transfer-sleep-lock -- i3lock --nofork
+exec --no-startup-id sct 5000
+exec --no-startup-id variety
 exec --no-startup-id nm-applet
 exec --no-startup-id blueman-applet
-exec --no-startup-id nitrogen --restore
 exec --no-startup-id picom
-exec --no-startup-id flameshot
 exec --no-startup-id polybar
 exec --no-startup-id kitty
+exec --no-startup-id flameshot
 #+end_src
 * Volume
-#+begin_src
+#+begin_src emacs-lisp
 set $refresh_i3status killall -SIGUSR1 i3status
 
 bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ +2% && $refresh_i3status
@@ -38,7 +67,7 @@ bindsym XF86AudioNext exec playerctl next
 bindsym XF86AudioPrev exec playerctl previous
 #+end_src
 * Brightness
-#+begin_src
+#+begin_src emacs-lisp
 bindsym XF86MonBrightnessUp exec brightnessctl set +10%
 bindsym XF86MonBrightnessDown exec brightnessctl set 10%-
 
@@ -48,12 +77,12 @@ bindsym $mod+XF86MonBrightnessUp exec sct 4000
 bindsym Control+Shift+o exec brightnessctl set 30%
 #+end_src
 * Floating modifier
-#+begin_src
+#+begin_src emacs-lisp
 floating_modifier $mod
 tiling_drag modifier titlebar
 #+end_src
 * Window focus/movement
-#+begin_src
+#+begin_src emacs-lisp
 bindsym $mod+h focus left
 bindsym $mod+j focus down
 bindsym $mod+k focus up
@@ -64,9 +93,8 @@ bindsym $mod+Shift+j move down
 bindsym $mod+Shift+k move up
 bindsym $mod+Shift+l move right
 
-bindsym $mod+p split h
-
-bindsym $mod+o split v
+bindsym $mod+p split h; exec dunstify i3 "Next window will open in a horizontal split"
+bindsym $mod+o split v; exec dunstify i3 "Next window will open in a vertical split"
 
 bindsym $mod+f fullscreen toggle
 bindsym $mod+Shift+space floating toggle
@@ -74,63 +102,77 @@ bindsym $mod+space focus mode_toggle
 bindsym $mod+a focus parent
 #+end_src
 * Workspaces
-#+begin_src
-set $ws1 "1"
-set $ws2 "2"
-set $ws3 "3"
-set $ws4 "4"
-set $ws5 "5"
-set $ws6 "6"
-set $ws7 "7"
-set $ws8 "8"
-set $ws9 "9"
-set $ws10 "10"
+#+begin_src emacs-lisp
+#set $ws1 "1"
+#set $ws2 "2"
+#set $ws3 "3"
+#set $ws4 "4"
+#set $ws5 "5"
+#set $ws6 "6"
+#set $ws7 "7"
+#set $ws8 "8"
+#set $ws9 "9"
+#set $ws10 "10"
 
-bindsym $mod+1 workspace number $ws1
-bindsym $mod+2 workspace number $ws2
-bindsym $mod+3 workspace number $ws3
-bindsym $mod+4 workspace number $ws4
-bindsym $mod+5 workspace number $ws5
-bindsym $mod+6 workspace number $ws6
-bindsym $mod+7 workspace number $ws7
-bindsym $mod+8 workspace number $ws8
-bindsym $mod+9 workspace number $ws9
-bindsym $mod+0 workspace number $ws10
+bindsym $mod+1 workspace number 1:txt
+bindsym $mod+2 workspace number 2:www
+bindsym $mod+3 workspace number 3:mus
+bindsym $mod+4 workspace number 4:term
+bindsym $mod+5 workspace number 5:file
+bindsym $mod+6 workspace number 6:game
+bindsym $mod+7 workspace number 7:edu
+bindsym $mod+8 workspace number 8:oth
+bindsym $mod+9 workspace number 9:oth II
+bindsym $mod+0 workspace number 10:oth III
 
-bindsym $mod+Shift+1 move container to workspace number $ws1
-bindsym $mod+Shift+2 move container to workspace number $ws2
-bindsym $mod+Shift+3 move container to workspace number $ws3
-bindsym $mod+Shift+4 move container to workspace number $ws4
-bindsym $mod+Shift+5 move container to workspace number $ws5
-bindsym $mod+Shift+6 move container to workspace number $ws6
-bindsym $mod+Shift+7 move container to workspace number $ws7
-bindsym $mod+Shift+8 move container to workspace number $ws8
-bindsym $mod+Shift+9 move container to workspace number $ws9
-bindsym $mod+Shift+0 move container to workspace number $ws10
+bindsym $mod+Tab workspace back_and_forth
+
+bindsym $mod+Shift+1 move container to workspace number 1:txt
+bindsym $mod+Shift+2 move container to workspace number 2:www
+bindsym $mod+Shift+3 move container to workspace number 3:mus
+bindsym $mod+Shift+4 move container to workspace number 4:term
+bindsym $mod+Shift+5 move container to workspace number 5:file
+bindsym $mod+Shift+6 move container to workspace number 6:game
+bindsym $mod+Shift+7 move container to workspace number 7:edu
+bindsym $mod+Shift+8 move container to workspace number 8:oth
+bindsym $mod+Shift+9 move container to workspace number 9:oth II
+bindsym $mod+Shift+0 move container to workspace number 10:oth III
 #+end_src
 * Window borders
-#+begin_src
+#+begin_src emacs-lisp
 default_border pixel 3
-client.focused          #81a1c1 #81a1c1 #e5e9f0 #81a1c1 #81a1c1
+#NORD COLOURS
+client.focused          #e5e9f0 #e5e9f0 #2e3440 #e5e9f0 #e5e9f0
 client.focused_inactive #4c566a #4c566a #e5e9f0 #4c566a #4c566a
-client.unfocused        #4c566a #4c566a #e5e9f0 #4c566a #4c566a
+client.focused_inactive #4c566a #4c566a #e5e9f0 #4c566a #4c566a
 client.urgent           #bf616a #bf616a #e5e9f0 #bf616a #bf616a
+#GRUVBOX COLOURS
+#client.focused          #83a598 #83a598 #ebdbb2 #83a598 #83a598
+#client.focused_inactive #504945 #504945 #ebdbb2 #504945 #504945
+#client.unfocused        #504945 #504945 #ebdbb2 #504945 #504945
+#client.urgent           #fb4934 #fb4934 #ebdbb2 #fb4934 #fb4934
+#MINT-Y COLOURS
+#client.focused          #dfdfdf #dfdfdf #353535 #dfdfdf #dfdfdf
+#client.focused_inactive #353535 #353535 #dfdfdf #353535 #353535
+#client.unfocused        #353535 #353535 #dfdfdf #353535 #353535
+#client.urgent           #e82127 #e82127 #dfdfdf #e82127 #e82127
 #+end_src
 ** Gaps
-#+begin_src
+#+begin_src emacs-lisp
 gaps inner 10
-gaps outer 10 #(outer gaps = inner + outer)
+gaps outer 10
 #+end_src
 * Bar
-#+begin_src
+#+begin_src emacs-lisp
 bar {
     status_command i3status
     mode invisible
     tray_output none
+    strip_workspace_numbers yes
 }
 #+end_src
 * Notifications
-#+begin_src
+#+begin_src emacs-lisp
 # Dismiss notification
 bindsym $mod+Escape exec dunstctl close
 
@@ -138,42 +180,49 @@ bindsym $mod+Escape exec dunstctl close
 bindsym $mod+Shift+Escape exec dunstctl history-pop
 #+end_src
 * Other Keybindings
-#+begin_src
-# Lock screen
+** Lock screen
+#+begin_src emacs-lisp
 bindsym Control+Shift+l exec i3lock --color 000000 && brightnessctl set 0
-
-# Launch terminal
+#+end_src
+** Restart Polybar
+#+begin_src emacs-lisp
+bindsym $mod+Control+p exec killall polybar && polybar
+#+end_src
+** Launch terminal
+#+begin_src emacs-lisp
 bindsym $mod+Return exec kitty
-
-# Kill focused window
+#+end_src
+** Kill focused window
+#+begin_src emacs-lisp
 bindsym $mod+Shift+q kill
-
-# Reload configuration file
+#+end_src
+** Reload configuration file
+#+begin_src emacs-lisp
 bindsym $mod+Shift+c reload
-
-# Restart i3 without logging out
+#+end_src
+** Restart i3 without logging out
+#+begin_src emacs-lisp
 bindsym $mod+Control+r restart
 #+end_src
 * Modes
 ** Container layouts
 Select from Tabbed, Stacked or Split layouts
-#+begin_src
-bindsym $mod+XF86LaunchA mode "$container-layout"; exec notify-send i3 "(t) tabbed\n(s) stacked\n(d) split"
-
-mode "$container-layout" {
+#+begin_src emacs-lisp
+bindsym XF86LaunchA mode "Container layout"; exec notify-send i3 "(t) tabbed\n(s) stacked\n(d) split"
+mode "Container layout" {
      bindsym t layout tabbed
      bindsym s layout stacking
      bindsym d layout toggle split
      bindsym Escape mode "default"; exec dunstctl close-all
      bindsym Return mode "default"; exec dunstctl close-all
-     bindsym $mod+XF86LaunchA mode "default"; exec dunstctl close-all
+     bindsym XF86LaunchA mode "default"; exec dunstctl close-all
 }
 #+end_src
 ** Resize
 Resize windows in this mode
-#+begin_src
-bindsym $mod+r mode "resize"; exec dunstify i3 "Resize windows"
-mode "resize" {
+#+begin_src emacs-lisp
+bindsym $mod+r mode "Resize window"; exec dunstify i3 "Resize windows"
+mode "Resize window" {
         bindsym h resize shrink width 2 px or 2 ppt
         bindsym j resize grow height 2 px or 2 ppt
         bindsym k resize shrink height 2 px or 2 ppt
@@ -186,24 +235,52 @@ mode "resize" {
 #+end_src
 ** Launch application
 Launch an application by pressing a key
-#+begin_src
-bindsym $mod+XF86LaunchB mode "$launch-application"; exec dunstify i3 "Select an application to launch:\nMusikcube (m)\nRanger (e)\nNemo (E)\nEmacs (v)\nFirefox (f)"
-mode "$launch-application" {
-     bindsym m exec kitty musikcube; exec dunstctl close-all; mode "default"
+#+begin_src emacs-lisp
+bindsym XF86LaunchB mode "Launch application"; exec dunstify i3 "Select an application to launch:\ncle(m)entine          Rang(e)r          (E) PCManFM\nEm(a)cs                   (f)irefox            (d)olphin\n(c)itra                       (o)ther"
+mode "Launch application" {
+     bindsym m exec clementine; exec dunstctl close-all; mode "default"
      bindsym e exec kitty ranger; exec dunstctl close-all; mode "default"
-     bindsym Shift+e exec nemo; exec dunstctl close-all; mode "default"
-     bindsym v exec emacs; exec dunstctl close-all; mode "default"
+     bindsym Shift+e exec pcmanfm; exec dunstctl close-all; mode "default"
+     bindsym a exec emacs; exec dunstctl close-all; mode "default"
      bindsym f exec firefox; exec dunstctl close-all; mode "default"
+     bindsym d exec dolphin-emu; exec dunstctl close-all; mode "default"
+     bindsym c exec flatpak run org.citra_emu.citra; exec dunstctl close-all; mode "default"
+     bindsym o exec rofi -show run; exec dunstctl close-all; mode "default"
      bindsym Escape mode "default"; exec dunstctl close-all
      bindsym Return mode "default"; exec dunstctl close-all
-     bindsym $mod+XF86LaunchB mode "default"; exec dunstctl close-all
+     bindsym XF86LaunchB mode "default"; exec dunstctl close-all
+}
+#+end_src
+** Flameshot
+Take a screenshot
+#+begin_src emacs-lisp
+bindsym XF86KbdBrightnessDown mode "Screenshot"; exec dunstify Flameshot "Take a screenshot:\n(m)anual\n(f)ull screen\nOpen (l)auncher"
+mode "Screenshot" {
+    bindsym m exec flameshot gui; exec dunstctl close-all; mode "default"
+    bindsym f exec flameshot full; exec dunstctl close-all; mode "default"
+    bindsym l exec flameshot launcher; exec dunstctl close-all; mode "default"
+    bindsym Escape mode "default"; exec dunstctl close-all
+    bindsym Return mode "default"; exec dunstctl close-all
+    bindsym XF86KbdBrightnessDown mode "default"; exec dunstctl close-all
+}
+#+end_src
+** Change wallpaper
+#+begin_src emacs-lisp
+bindsym XF86KbdBrightnessUp mode "Change wallpaper"; exec dunstify Variety "Change current wallpaper:\n(n)ext\n(p)revious\n(t)oggle pause"
+mode "Change wallpaper" {
+    bindsym n exec variety -n; exec dunstctl close-all; mode "default"
+    bindsym p exec variety -p; exec dunstctl close-all; mode "default"
+    bindsym t exec variety --toggle-pause; exec dunstctl close-all; mode "default"
+    bindsym Escape mode "default"; exec dunstctl close-all
+    bindsym Return mode "default"; exec dunstctl close-all
+    bindsym XF86KbdBrightnessUp mode "default"; exec dunstctl close-all
 }
 #+end_src
 ** Exit session
 Options for exiting the current session
-#+begin_src
-bindsym $mod+Control+q mode "$exit-session"; exec dunstify i3 "Logout (l)\nShutdown (s)\nReboot (r)"
-mode "$exit-session" {
+#+begin_src emacs-lisp
+bindsym $mod+Control+q mode "Exit session"; exec dunstify i3 "Logout (l)\nShutdown (s)\nReboot (r)"
+mode "Exit session" {
      bindsym l exec i3-msg exit
      bindsym s exec poweroff
      bindsym r exec reboot
