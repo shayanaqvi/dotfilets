@@ -1,0 +1,44 @@
+theme = "dark_plus"
+
+[editor]
+line-number = "relative"
+mouse = true
+cursorline = true
+cursorcolumn = true
+idle-timeout = 2
+completion-trigger-len = 1
+gutters = ["diff", "diagnostics", "line-numbers", "spacer"]
+bufferline = "always"
+
+[editor.cursor-shape]
+insert = "bar"
+normal = "block"
+select = "underline"
+
+[editor.lsp]
+enable = true
+display-messages = true
+display-inlay-hints = true
+
+[editor.statusline]
+left = ["file-type", "version-control", "spacer", "spinner"]
+center = ["mode"]
+right = ["file-modification-indicator","total-line-numbers", "selections", "position", "diagnostics"]
+mode.normal = "NORMAL"
+mode.insert = "INSERT"
+mode.select = "SELECT"
+
+[editor.indent-guides]
+render = true
+character = "╎"
+skip-levels = 1
+
+[keys.select]
+X = "extend_line_above"
+
+[keys.normal]
+C-o = "goto_previous_buffer"
+C-p = "goto_next_buffer"
+x = "no_op"
+X = "no_op"
+
