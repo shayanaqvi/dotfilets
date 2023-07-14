@@ -3,7 +3,7 @@ Hello!
 This is a respository of dotfiles for (at present):
 - Qtile
 - Helix
-- Kitty  
+- Kitty    
 Wallpapers are also supplied
 # Qtile
 My configuration of qtile aims to look somewhat old-fashioned. It does not differ too much from the default configuration, consisting mostly of keybindings and modifications to layouts and the bar.  
