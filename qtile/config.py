@@ -154,33 +154,36 @@ widget_defaults = dict(
 )
 extension_defaults = widget_defaults.copy()
 
+background = ["#b58900", "#826200"]
+foreground = "#fdf6e3"
 screens = [
     Screen(
         top=bar.Bar(
             [
                 widget.GroupBox(
-                    highlight_method="block",
                     padding=5,
+                    highlight_method="block"
                 ),
                 widget.Sep(
-                    foreground=["#939393", "#dfdfdf"],
+                    foreground=foreground,
                     linewidth=1,
                     size_percent=50,
                 ),
                 widget.WindowTabs(
                     separator="     ",
                     padding=5,
+                    foreground=foreground
                 ),
                 output.Output(
                     update_interval=60,
                     cmd="uptime --pretty",
                     padding=5,
-                    background=["#dfdfdf", "#939393"],
-                    foreground=["#215578", "#163950"],
+                    background=background,
+                    foreground=foreground,
                 ),
                 widget.Sep(
-                    foreground=["#215578", "#163950"],
-                    background=["#dfdfdf", "#939393"],
+                    foreground=foreground,
+                    background=background,
                     linewidth=1,
                     size_percent=50,
                 ),
@@ -189,38 +192,38 @@ screens = [
                     cmd="nmcli -t -f active,ssid dev wifi | grep '^yes' | cut -d: -f2",
                     fmt="Network: {}",
                     padding=5,
-                    background=["#dfdfdf", "#939393"],
-                    foreground=["#215578", "#163950"],
+                    background=background,
+                    foreground=foreground,
                 ),
                 widget.Sep(
-                    foreground=["#215578", "#163950"],
-                    background=["#dfdfdf", "#939393"],
+                    foreground=foreground,
+                    background=background,
                     linewidth=1,
                     size_percent=50,
                 ),
                 widget.Backlight(
-                    background=["#dfdfdf", "#939393"],
-                    foreground=["#215578", "#163950"],
+                    background=background,
+                    foreground=foreground,
                     padding=5,
                     fmt="Backlight: {}"
                 ),
                 widget.Sep(
-                    foreground=["#215578", "#163950"],
-                    background=["#dfdfdf", "#939393"],
+                    foreground=foreground,
+                    background=background,
                     linewidth=1,
                     size_percent=50,
                 ),
                 output.Output(
-                    background=["#dfdfdf", "#939393"],
-                    foreground=["#215578", "#163950"],
+                    background=background,
+                    foreground=foreground,
                     padding=5,
                     update_interval=0.25,
                     cmd='pamixer --get-volume',
                     fmt='Volume: {}',
                 ),
                 widget.Mpd2(
-                    background=["#215578", "#163950"],
-                    foreground="#ffffff",
+                    background=["#859900", "#596600"],
+                    foreground=foreground,
                     status_format='{play_status} {artist}/{title}',
                     idle_format='{play_status} {idle_message}',
                     idle_message='MPD not playing',
@@ -231,7 +234,7 @@ screens = [
                     padding=5,
                 ),
                 widget.Sep(
-                    foreground=["#939393", "#dfdfdf"],
+                    foreground=foreground,
                     linewidth=1,
                     size_percent=50,
                 ),
